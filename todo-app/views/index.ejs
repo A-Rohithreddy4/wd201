@@ -9,17 +9,25 @@
   <title>My To-Do Application</title>
 </head>
 <body>
-  <%- include('header.ejs') %> <br>
-  <table border="1">
-    <tr>
-      <th>ID</th>
-      <th>Title</th>
-      <th>DueDate</th>
-      <th>Completed</th>
-    </tr>
-    <%- include('todos.ejs') %>
-  </table>
-   <br>
-  <%- include('footer.ejs') %>
+  <div class="grid grid-cols-6">
+    <div class="col-start-3 col-span-2">
+      <%- include('header.ejs') %> 
+      <form>
+        <div class="flex py-6 gap-3">
+          <div class="flex-auto">
+            <input type="text" placeholder="what's next?" class="border border-gray-400 rounded text-gray-900 p-1.5 w-full" required />
+          </div>
+          <div class="flex-auto">
+            <input type="date" class="border border-gray-400 rounded text-gray-900 p-2 leading-3 w-full" required />
+          </div>
+          <div class="flex-none">
+            <button type="submit" class="bg-green-600 text-white px-5 py-1.5 rounded mr-2 mb-2">Add</button>
+          </div>
+        </div>
+      </form>
+      <%- include('todos.ejs') %>
+    </div>
+
+  </div>
 </body>
 </html>
