@@ -3,6 +3,7 @@
 /* eslint-disable semi */
 "use strict";
 const { Model } = require("sequelize");
+const { Op } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
     /**
@@ -20,6 +21,42 @@ module.exports = (sequelize, DataTypes) => {
 
     static getTodos() {
       return this.findAll();
+    }
+
+    static getOverdue() {
+      let today = new Date().toISOString().split("T")[0];
+      return this.findAll({
+        where: {
+          dueDate: {
+            [Op.lt]: today,
+          },
+          completed: false,
+        },
+      });
+    }
+
+    static getDueToday() {
+      let today = new Date().toISOString().split("T")[0];
+      return this.findAll({
+        where: {
+          dueDate: {
+            [Op.eq]: today,
+          },
+          completed: false,
+        },
+      });
+    }
+
+    static getDueLater() {
+      let today = new Date().toISOString().split("T")[0];
+      return this.findAll({
+        where: {
+          dueDate: {
+            [Op.gt]: today,
+          },
+          completed: false,
+        },
+      });
     }
 
     markAsCompleted() {
