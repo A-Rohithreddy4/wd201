@@ -12,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      Todo.belongsTo(models.User, {
+        foreignKey: "userId",
+      });
       // define association here
     }
 
@@ -19,12 +22,12 @@ module.exports = (sequelize, DataTypes) => {
       return this.create({ title: title, dueDate: dueDate, completed: false });
     }
 
-    static getTodos() {
+    static async getTodos() {
       return this.findAll();
     }
 
-    static getOverdue() {
-      let today = new Date().toISOString().split("T")[0];
+    static async getOverdue() {
+      let today = new Date().toISOString();
       return this.findAll({
         where: {
           dueDate: {
@@ -35,8 +38,8 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
-    static getDueToday() {
-      let today = new Date().toISOString().split("T")[0];
+    static async getDueToday() {
+      let today = new Date().toISOString();
       return this.findAll({
         where: {
           dueDate: {
@@ -47,8 +50,8 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
-    static getDueLater() {
-      let today = new Date().toISOString().split("T")[0];
+    static async getDueLater() {
+      let today = new Date().toISOString();
       return this.findAll({
         where: {
           dueDate: {
@@ -59,8 +62,26 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
-    markAsCompleted() {
-      return this.update({ completed: true });
+    static async getCompletedTodos() {
+      return this.findAll({
+        where: {
+          completed: true,
+        },
+      });
+    }
+
+    static async remove(id) {
+      return this.destroy({
+        where: {
+          id,
+        },
+      });
+    }
+
+    setCompletionStatus(check) {
+      return this.update({
+        completed: check,
+      });
     }
   }
   Todo.init(
